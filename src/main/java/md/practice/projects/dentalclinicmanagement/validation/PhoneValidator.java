@@ -2,11 +2,9 @@ package md.practice.projects.dentalclinicmanagement.validation;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.springframework.stereotype.Service;
 
 import java.util.regex.Pattern;
 
-@Service
 public class PhoneValidator implements ConstraintValidator<ValidPhone, String> {
 
     private static final Pattern PHONE_PATTERN = Pattern.compile(
