@@ -5,16 +5,19 @@ import md.practice.projects.dentalclinicmanagement.dto.ErrorResponse;
 import md.practice.projects.dentalclinicmanagement.dto.ValidationErrorResponse;
 import md.practice.projects.dentalclinicmanagement.exception.BadRequestException;
 import md.practice.projects.dentalclinicmanagement.exception.DuplicateResourceException;
-import md.practice.projects.dentalclinicmanagement.exception.InvalidBirthDateException;
+import md.practice.projects.dentalclinicmanagement.exception.InvalidPatientDataCheckException;
 import md.practice.projects.dentalclinicmanagement.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -55,31 +58,43 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ValidationErrorResponse> handeValidationException(MethodArgumentNotValidException ex, HttpServletRequest request) {
 
-        List<String> errors = ex.getBindingResult()
-                .getFieldErrors()
-                .stream()
-                .map(error -> error.getField() + ": " + error.getDefaultMessage())
-                .toList();
-
-        ValidationErrorResponse error = new ValidationErrorResponse(
+    @ExceptionHandler(InvalidPatientDataCheckException.class)
+    public ResponseEntity<ErrorResponse> handeInvalidPatientDataCheckException(InvalidPatientDataCheckException ex,
+                                                                               HttpServletRequest request) {
+        ErrorResponse error = new ErrorResponse(
                 LocalDateTime.now(),
                 HttpStatus.BAD_REQUEST.value(),
-                "Validation Failed",
-                errors,
+                "Birthdate and patient jmbg date is not equeal",
+                ex.getMessage(),
                 request.getRequestURI()
         );
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
-    @ExceptionHandler(InvalidBirthDateException.class)
-    public ResponseEntity<ErrorResponse> handeInvalidBirthDateException(InvalidBirthDateException ex, HttpServletRequest request) {
-        ErrorResponse error = new ErrorResponse(
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ValidationErrorResponse> handleMethodArgumentNotValidException(
+            MethodArgumentNotValidException ex, HttpServletRequest request) {
+
+        Map<String, String> errors = new HashMap<>();
+
+        ex.getBindingResult().getAllErrors().forEach(error -> {
+            if (error instanceof FieldError) {
+                String fieldName = ((FieldError) error).getField();
+                String errorMessage = error.getDefaultMessage();
+                errors.put(fieldName, errorMessage);
+            } else {
+                String objectName = error.getObjectName();
+                String errorMessage = error.getDefaultMessage();
+                errors.put(objectName, errorMessage);
+            }
+        });
+
+        ValidationErrorResponse error = new ValidationErrorResponse(
                 LocalDateTime.now(),
                 HttpStatus.BAD_REQUEST.value(),
-                "Invalid Birth Date",
-                ex.getMessage(),
+                "Validation Error",
+                errors,
                 request.getRequestURI()
         );
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);

@@ -17,7 +17,7 @@ public class Patient {
     @Column(unique = true, length = 13)
     private String jmbg;
     @Column(nullable = false)
-    private LocalDate dateOfBirth;
+    private String dateOfBirth;
     @Column(nullable = false)
     private String phone;
     @Column(nullable = false, unique = true)
@@ -26,7 +26,7 @@ public class Patient {
     @Column(length = 1000)
     private String medicalHistory;
 
-    public Patient(Long id, String firstName, String lastName, String jmbg, LocalDate dateOfBirth, String phone, String email, String address, String medicalHistory) {
+    public Patient(Long id, String firstName, String lastName, String jmbg, String dateOfBirth, String phone, String email, String address, String medicalHistory) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -73,11 +73,11 @@ public class Patient {
         this.lastName = lastName;
     }
 
-    public LocalDate getDateOfBirth() {
+    public String getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(LocalDate dateOfBirth) {
+    public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 

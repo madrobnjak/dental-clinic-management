@@ -10,11 +10,11 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = {PatientDataValidator.class})
+@Constraint(validatedBy = PatientDataValidator.class)
 public @interface ValidPatientData {
-    String message() default "Patient data is invalid";
-    String jmbg();
-    String birthDate();
+    String message() default "Birth date and JMBG date part do not match";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 }

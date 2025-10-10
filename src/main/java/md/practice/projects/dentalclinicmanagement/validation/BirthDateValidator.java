@@ -2,9 +2,9 @@ package md.practice.projects.dentalclinicmanagement.validation;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import md.practice.projects.dentalclinicmanagement.exception.InvalidBirthDateException;
 import org.springframework.stereotype.Service;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
 @Service
 public class BirthDateValidator implements ConstraintValidator<ValidBirthDate, String> {
@@ -18,8 +18,8 @@ public class BirthDateValidator implements ConstraintValidator<ValidBirthDate, S
         try{
             LocalDate.of(year,mm,dd);
         }
-        catch(InvalidBirthDateException e){
-           throw new InvalidBirthDateException("Birth date is invalid");
+        catch(DateTimeException e){
+           return false;
         }
         return true;
     }

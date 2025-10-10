@@ -1,13 +1,14 @@
 package md.practice.projects.dentalclinicmanagement.dto;
 
 import java.time.LocalDateTime;
-import java.util.List;
+
+import java.util.Map;
 
 public record ValidationErrorResponse(
         LocalDateTime timestamp,
         Integer status,
         String error,
-        List<String> message,
+        Map<String, String> errors,
         String path
 ) {
 }
