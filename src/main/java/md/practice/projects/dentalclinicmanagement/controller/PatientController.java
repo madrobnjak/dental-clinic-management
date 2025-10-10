@@ -3,7 +3,7 @@ package md.practice.projects.dentalclinicmanagement.controller;
 import jakarta.validation.Valid;
 import md.practice.projects.dentalclinicmanagement.dto.PatientDTO;
 import md.practice.projects.dentalclinicmanagement.entity.Patient;
-import md.practice.projects.dentalclinicmanagement.mapper.PatientEntityMapper;
+import md.practice.projects.dentalclinicmanagement.mapper.EntityMapper;
 import md.practice.projects.dentalclinicmanagement.service.PatientService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +16,11 @@ import java.util.List;
 public class PatientController {
 
     private final PatientService patientService;
-    private final PatientEntityMapper patientEntityMapper;
+    private final EntityMapper entityMapper;
 
-    public PatientController(PatientService patientService, PatientEntityMapper patientEntityMapper) {
+    public PatientController(PatientService patientService, EntityMapper entityMapper) {
         this.patientService = patientService;
-        this.patientEntityMapper = patientEntityMapper;
+        this.entityMapper = entityMapper;
     }
 
     @GetMapping()
@@ -35,14 +35,14 @@ public class PatientController {
 
     @PostMapping
     public ResponseEntity<Patient> createPatient(@Valid @RequestBody PatientDTO patientDTO) {
-        Patient patient = patientEntityMapper.mappPatientDTOToPatient(patientDTO);
+        Patient patient = entityMapper.mappDTOtoEntity(patientDTO);
         Patient createdPatient = patientService.createPatient(patient);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdPatient);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Patient> updateProduct(@PathVariable Long id, @RequestBody PatientDTO patientDTO) {
-        Patient patientDetailsNew = patientEntityMapper.mappPatientDTOToPatient(patientDTO);
+        Patient patientDetailsNew = entityMapper.mappDTOtoEntity(patientDTO);
         return ResponseEntity.ok(patientService.updatePatient(id, patientDetailsNew));
     }
 

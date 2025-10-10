@@ -5,6 +5,7 @@ import md.practice.projects.dentalclinicmanagement.dto.ErrorResponse;
 import md.practice.projects.dentalclinicmanagement.dto.ValidationErrorResponse;
 import md.practice.projects.dentalclinicmanagement.exception.BadRequestException;
 import md.practice.projects.dentalclinicmanagement.exception.DuplicateResourceException;
+import md.practice.projects.dentalclinicmanagement.exception.InvalidBirthDateException;
 import md.practice.projects.dentalclinicmanagement.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -68,6 +69,17 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST.value(),
                 "Validation Failed",
                 errors,
+                request.getRequestURI()
+        );
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(InvalidBirthDateException.class)
+    public ResponseEntity<ErrorResponse> handeInvalidBirthDateException(InvalidBirthDateException ex, HttpServletRequest request) {
+        ErrorResponse error = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                "Invalid Birth Date",
+                ex.getMessage(),
                 request.getRequestURI()
         );
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
