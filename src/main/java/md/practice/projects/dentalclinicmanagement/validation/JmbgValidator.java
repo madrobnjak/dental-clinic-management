@@ -2,14 +2,17 @@ package md.practice.projects.dentalclinicmanagement.validation;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.springframework.stereotype.Service;
+import md.practice.projects.dentalclinicmanagement.helper.ConvertDataTypes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Service
 public class JmbgValidator implements ConstraintValidator<ValidJmbg, String> {
-    private final BirthDateValidator  birthDateValidator;
+    Logger logger = LoggerFactory.getLogger(JmbgValidator.class);
 
-    public JmbgValidator(BirthDateValidator birthDateValidator) {
-        this.birthDateValidator = birthDateValidator;
+    private final ConvertDataTypes convertDataTypes;
+
+    public JmbgValidator(ConvertDataTypes convertDataTypes) {
+        this.convertDataTypes = convertDataTypes;
     }
 
     @Override
@@ -17,12 +20,13 @@ public class JmbgValidator implements ConstraintValidator<ValidJmbg, String> {
         boolean isValid = false;
 
         if(jmbg == null || jmbg.length() < 13){
+            logger.info("JMBG length is less than 13, or null");
             return isValid;
         }
         int[] digits=jmbg.chars().map(c->c-'0').toArray();
 
-        String birthDate=jmbg.substring(0,8);
-        birthDateValidator.isValid(birthDate,constraintValidatorContext);
+        String birthDate=jmbg.substring(0,7);
+        convertDataTypes.toLocalDate(birthDate);
 
         int sum = 7 * (digits[0] + digits[6])
                 + 6 * (digits[1] + digits[7])

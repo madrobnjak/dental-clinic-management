@@ -2,9 +2,10 @@ package md.practice.projects.dentalclinicmanagement.service;
 
 import md.practice.projects.dentalclinicmanagement.entity.Patient;
 import md.practice.projects.dentalclinicmanagement.exception.DuplicateResourceException;
-import md.practice.projects.dentalclinicmanagement.exception.ResourceNotFoundException;
-import md.practice.projects.dentalclinicmanagement.helper.PatientUpdateMapper;
 import md.practice.projects.dentalclinicmanagement.repository.PatientRepository;
+
+import md.practice.projects.dentalclinicmanagement.specification.PatientSpecification;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,40 +14,27 @@ import java.util.List;
 public class PatientService {
 
     private final PatientRepository patientRepository;
-    private final PatientUpdateMapper patientUpdateMapper;
 
-    public PatientService(PatientRepository patientRepository, PatientUpdateMapper patientUpdateMapper) {
+    public PatientService(PatientRepository patientRepository) {
         this.patientRepository = patientRepository;
-        this.patientUpdateMapper = patientUpdateMapper;
-    }
-
-    public List<Patient> getAllProducts() {
-        return patientRepository.findAll();
-    }
-
-    public Patient getPatientId(Long id) {
-        return patientRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product with id= " + id + " not found"));
     }
 
     public Patient createPatient(Patient patient) {
-        if (!patientRepository.existsByEmail(patient.getEmail())) {
+        if (!patientRepository.existsByJmbg(patient.getJmbg())) {
             return patientRepository.save(patient);
         } else {
-            throw new DuplicateResourceException("Patient with name= " + patient.getEmail() + " already exists");
+            throw new DuplicateResourceException("Patient with jmbg= " + patient.getJmbg() + " already exists");
         }
     }
 
-    public Patient updatePatient(Long id, Patient patientDetailsNew) {
-        Patient existingPatient = getPatientId(id);
-        Patient updatedPatient = patientUpdateMapper.updateMapper(existingPatient, patientDetailsNew);
+    public List<Patient> searchPatients(Patient patient) {
+        Specification<Patient> spec = PatientSpecification.hasEmail(patient.getEmail())
+                .and(PatientSpecification.hasJmbg(patient.getJmbg()))
+                .and(PatientSpecification.hasPhone(patient.getPhone()))
+                .and(PatientSpecification.firstNameContains(patient.getFirstName()))
+                .and(PatientSpecification.lastNameContains(patient.getLastName()));
 
-        return patientRepository.save(updatedPatient);
-    }
-
-    public void deletePatientById(Long id) {
-        getPatientId(id);
-        patientRepository.deleteById(id);
+        return patientRepository.findAll(spec);
     }
 
 }

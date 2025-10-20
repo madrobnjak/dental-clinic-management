@@ -1,4 +1,4 @@
-package md.practice.projects.dentalclinicmanagement.repository;
+package md.practice.projects.dentalclinicmanagement.specification;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;

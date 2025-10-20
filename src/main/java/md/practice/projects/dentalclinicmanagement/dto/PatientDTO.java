@@ -27,7 +27,6 @@ public record PatientDTO(
         @ValidPhone
         String phone,
 
-        @NotBlank(message = "Email is required")
         @Email(message = "Email must be valid")
         String email,
 

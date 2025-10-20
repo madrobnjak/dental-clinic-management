@@ -1,9 +1,9 @@
 package md.practice.projects.dentalclinicmanagement.helper;
 
 import md.practice.projects.dentalclinicmanagement.entity.Patient;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 public class PatientUpdateMapper {
     public Patient updateMapper(Patient existingPatient, Patient patientDetailsNew) {
         existingPatient.setFirstName(patientDetailsNew.getFirstName());

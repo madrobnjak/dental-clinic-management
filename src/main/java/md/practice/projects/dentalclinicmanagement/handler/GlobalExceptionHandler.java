@@ -5,7 +5,6 @@ import md.practice.projects.dentalclinicmanagement.dto.ErrorResponse;
 import md.practice.projects.dentalclinicmanagement.dto.ValidationErrorResponse;
 import md.practice.projects.dentalclinicmanagement.exception.BadRequestException;
 import md.practice.projects.dentalclinicmanagement.exception.DuplicateResourceException;
-import md.practice.projects.dentalclinicmanagement.exception.InvalidPatientDataCheckException;
 import md.practice.projects.dentalclinicmanagement.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @ControllerAdvice
@@ -56,20 +54,6 @@ public class GlobalExceptionHandler {
                 request.getRequestURI()
         );
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
-    }
-
-
-    @ExceptionHandler(InvalidPatientDataCheckException.class)
-    public ResponseEntity<ErrorResponse> handeInvalidPatientDataCheckException(InvalidPatientDataCheckException ex,
-                                                                               HttpServletRequest request) {
-        ErrorResponse error = new ErrorResponse(
-                LocalDateTime.now(),
-                HttpStatus.BAD_REQUEST.value(),
-                "Birthdate and patient jmbg date is not equeal",
-                ex.getMessage(),
-                request.getRequestURI()
-        );
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
