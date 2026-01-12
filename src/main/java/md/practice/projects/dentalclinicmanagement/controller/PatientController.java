@@ -36,7 +36,7 @@ public class PatientController {
     }
 
     @GetMapping("searchBy/")
-    public ResponseEntity<List<Patient>> getPatientsBy(@Valid @ModelAttribute PatientSearchDTO searchDTO) {
+    public ResponseEntity<List<Patient>> getPatientsBy(@Valid @RequestBody PatientSearchDTO searchDTO) {
         Patient patient=entityMapper.mappDTOtoEntity(searchDTO);
         List<Patient> patients=patientService.searchPatients(patient);
         return ResponseEntity.ok(patients);
