@@ -10,4 +10,5 @@ import org.springframework.stereotype.Repository;
 public interface PatientRepository extends JpaRepository<Patient, Long>, JpaSpecificationExecutor<Patient> {
 
     boolean existsByJmbg(Long jmbg);
+    boolean existsByEmail(String email);
 }

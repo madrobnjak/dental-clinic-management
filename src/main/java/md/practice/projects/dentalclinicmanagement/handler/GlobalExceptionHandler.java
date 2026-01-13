@@ -6,6 +6,7 @@ import md.practice.projects.dentalclinicmanagement.dto.ValidationErrorResponse;
 import md.practice.projects.dentalclinicmanagement.exception.BadRequestException;
 import md.practice.projects.dentalclinicmanagement.exception.DuplicateResourceException;
 import md.practice.projects.dentalclinicmanagement.exception.ResourceNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -44,7 +45,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(DuplicateResourceException.class)
+    @ExceptionHandler({DuplicateResourceException.class, DataIntegrityViolationException.class})
     public ResponseEntity<ErrorResponse> handeDuplicateResourceException(DuplicateResourceException ex, HttpServletRequest request) {
         ErrorResponse error = new ErrorResponse(
                 LocalDateTime.now(),

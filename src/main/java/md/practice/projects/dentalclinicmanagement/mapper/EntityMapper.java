@@ -44,7 +44,6 @@ public class EntityMapper {
         if (searchDTO.jmbg() != null) {
             Long jmbg = convertDataTypes.toLong(searchDTO.jmbg());
             patient.setJmbg(jmbg);
-
         }
         patient.setFirstName(searchDTO.firstName());
         patient.setLastName(searchDTO.lastName());

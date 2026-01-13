@@ -35,8 +35,8 @@ public class PatientController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdPatient);
     }
 
-    @GetMapping("searchBy/")
-    public ResponseEntity<List<Patient>> getPatientsBy(@Valid @RequestBody PatientSearchDTO searchDTO) {
+    @PostMapping("searchBy/")
+    public ResponseEntity<List<Patient>> getPatientsBy(@Valid @RequestBody(required = false) PatientSearchDTO searchDTO) {
         Patient patient=entityMapper.mappDTOtoEntity(searchDTO);
         List<Patient> patients=patientService.searchPatients(patient);
         return ResponseEntity.ok(patients);

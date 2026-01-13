@@ -20,10 +20,12 @@ public class PatientService {
     }
 
     public Patient createPatient(Patient patient) {
-        if (!patientRepository.existsByJmbg(patient.getJmbg())) {
-            return patientRepository.save(patient);
-        } else {
+        if (patientRepository.existsByJmbg(patient.getJmbg())) {
             throw new DuplicateResourceException("Patient with jmbg= " + patient.getJmbg() + " already exists");
+        } else if (patientRepository.existsByEmail(patient.getEmail())) {
+            throw new DuplicateResourceException("Patient with email= " + patient.getEmail() + " already exists");
+        } else {
+            return patientRepository.save(patient);
         }
     }
 

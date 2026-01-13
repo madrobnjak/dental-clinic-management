@@ -20,7 +20,7 @@ public class Patient {
     private LocalDate dateOfBirth;
     @Column(nullable = false)
     private String phone;
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     private String email;
     private String address;
     @Column(length = 1000)
