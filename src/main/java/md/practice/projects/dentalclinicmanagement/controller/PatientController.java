@@ -42,4 +42,11 @@ public class PatientController {
         return ResponseEntity.ok(patients);
     }
 
+    @DeleteMapping("deleteBy/")
+    public ResponseEntity<Patient> deletePatientBy(@Valid @RequestBody PatientSearchDTO searchDTO) {
+        Patient patient = entityMapper.mappDTOtoEntity(searchDTO);
+        Patient deletedPatient=patientService.deletePatient(patient);
+        return ResponseEntity.ok(deletedPatient);
+    }
+
 }

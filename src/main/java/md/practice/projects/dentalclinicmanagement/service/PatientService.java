@@ -39,4 +39,9 @@ public class PatientService {
         return patientRepository.findAll(spec);
     }
 
+    public Patient deletePatient(Patient patient) {
+
+        return patient;
+    }
+
 }
